@@ -1,4 +1,7 @@
+import os
+
 from fastapi import APIRouter, UploadFile, HTTPException
+from fastapi.responses import FileResponse
 from api import service
 
 router = APIRouter()
@@ -10,12 +13,23 @@ async def filter_case_sensitive(data: list):
 
 
 @router.post("/upload/{filename}")
-async def combine_data_files(files: list[UploadFile], filename):
+async def combine_data_files(files: list[UploadFile], filename: str):
     error_files = []
     for file in files:
         if not file.filename.endswith((".csv", ".json")):
             error_files.append(file.filename)
     if error_files:
         raise HTTPException(status_code=415, detail=error_files)
-    return await service.combine_files(files, filename)
+    await service.combine_files(files, filename)
+    return {"filename": filename}
+
+
+@router.get("/load/{filename}")
+async def load_file(filename: str):
+    path = os.path.join('data/', filename)
+    if os.path.isfile(path):
+        return FileResponse(path)
+    else:
+        raise HTTPException(status_code=404, detail="file not found: " + filename)
+
 
