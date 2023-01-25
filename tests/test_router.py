@@ -24,7 +24,7 @@ def test_combine_files_415():
 
 
 def test_load_file():
-    response = client.get("/load/example.csv")
+    response = client.get("/load/test.csv")
     assert response.status_code == 200
 
 
