@@ -1,7 +1,7 @@
 import os
 import logging
 
-from fastapi import APIRouter, UploadFile, HTTPException, Request, Response
+from fastapi import APIRouter, UploadFile, HTTPException, Request
 from fastapi.responses import FileResponse
 from api import service
 
