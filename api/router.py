@@ -8,12 +8,12 @@ router = APIRouter()
 
 
 @router.post("/filter/case_sensitive")
-async def filter_case_sensitive(data: list):
+def filter_case_sensitive(data: list):
     return service.filter_words(data)
 
 
 @router.post("/upload/{filename}")
-async def combine_data_files(files: list[UploadFile], filename: str):
+def combine_data_files(files: list[UploadFile], filename: str):
     error_files = []
     for file in files:
         if not file.filename.endswith((".csv", ".json")):
@@ -25,11 +25,9 @@ async def combine_data_files(files: list[UploadFile], filename: str):
 
 
 @router.get("/load/{filename}")
-async def load_file(filename: str):
+def load_file(filename: str):
     path = os.path.join('data/', filename)
     if os.path.isfile(path):
         return FileResponse(path)
     else:
         raise HTTPException(status_code=404, detail="file not found: " + filename)
-
-
